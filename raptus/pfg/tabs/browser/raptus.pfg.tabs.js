@@ -29,10 +29,12 @@
       tabs.tabs = $('<ul class="pfg-tabs-tabs" />').appendTo(tabs.header);
       tabs.prev = $('<input type="submit" class="pfg-tabs-prev" value="'+tabs.settings.prevLabel+'" />').hide().appendTo(tabs.footer).click(function(e) {
         e.preventDefault();
+        e.stopImmediatePropagation();
         tabs.activate(tabs.current-1);
       });
       tabs.next = $('<input type="submit" class="pfg-tabs-next" value="'+tabs.settings.nextLabel+'" />').hide().appendTo(tabs.footer).click(function(e) {
         e.preventDefault();
+        e.stopImmediatePropagation();
         tabs.activate(tabs.current+1);
       });
       tabs.info = $('<span class="pfg-tabs-info">'+tabs.settings.infoLabel+'</span>').appendTo(tabs.footer);
@@ -102,6 +104,10 @@
       this.info.html(this.settings.infoLabel.replace('{current}', this.current + 1).replace('{total}', this.contents.size()));
       if(this.rightPos < 0)
         this.scrollTo(index);
+      var top = $(document).scrollTop();
+      var pos = this.tabs.offset().top;
+      if(top > pos)
+        $(document).scrollTop(pos);
     }
     pfgTabs.prototype.scrollTo = function(index) {
       index = Math.min(this.contents.size() - 1, Math.max(0, index));
